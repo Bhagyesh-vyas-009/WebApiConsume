@@ -1,0 +1,71 @@
+﻿@using System.Data;
+@model IEnumerable<ApiConsume.Models.CountryModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section>
+    <span><h3>Country List</h3></span>
+      @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success text-success">
+        @TempData["Success"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger text-danger">
+        @TempData["ErrorMessage"]
+        </div>
+    }
+    <div class="float-end">
+        <a class="btn btn-primary mb-3" asp-controller="Country" asp-action="CountryAddEdit">Add Country</a>
+        @* <a class="btn btn-info mb-3" asp-controller="ExportToExcel" asp-action="ExportToExcel" asp-route-table="User"><i class="bi bi-filetype-xlsx"></i>Export</a> *@
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <!-- <th scope="col">UserID</th> -->
+                <th scope="col">Country Name</th>
+                <th scope="col">Country Code</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">Modified Date</th>
+                <th colspan="2" >Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dr in Model)
+            {
+                <tr>
+                    <!-- <td scope="col">dr.UserID</td> -->
+                    <td scope="col">@dr.CountryName</td>
+                    <td scope="col">@dr.CountryCode</td>
+                    <td scope="col">@dr.CreatedDate</td>
+                    <td scope="col">@dr.ModifiedDate</td>
+
+                    <td>
+                        <a class="btn btn-outline-success" asp-controller="Country" asp-action="CountryAddEdit" asp-route-UserID="@dr.CountryID">
+                        <i class="bi bi-pen-fill"></i>
+                        </a>
+                    </td>
+                <td>
+                
+                <td>
+                        
+
+                        <form method="post" asp-controller="Country" asp-action="CountryDelete">
+                            <input type="hidden" name="CountryID" value=@dr.CountryID />
+                            <button type="submit" class="btn btn-outline-danger btn-xs" onclick="return confirm('Sure!! Are you want to delete @dr.CountryName')">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </form>               
+                </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
