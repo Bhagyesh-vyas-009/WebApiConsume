@@ -1,0 +1,73 @@
+﻿@using System.Data;
+@model IEnumerable<ApiConsume.Models.StateModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section>
+    <span><h3>State List</h3></span>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success text-success">
+            @TempData["Success"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger text-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+    <div class="float-end">
+        <a class="btn btn-primary mb-3" asp-controller="State" asp-action="StateAddEdit">Add State</a>
+        @* <a class="btn btn-info mb-3" asp-controller="ExportToExcel" asp-action="ExportToExcel" asp-route-table="User"><i class="bi bi-filetype-xlsx"></i>Export</a> *@
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <!-- <th scope="col">UserID</th> -->
+                <th scope="col">State Name</th>
+                <th scope="col">State Code</th>
+                <th scope="col">Country ID</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">Modified Date</th>
+                <th colspan="2">Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dr in Model)
+            {
+                <tr>
+                    <!-- <td scope="col">dr.UserID</td> -->
+                    <td scope="col">@dr.StateName</td>
+                    <td scope="col">@dr.StateCode</td>
+                    <td scope="col">@dr.CountryID</td>
+                    <td scope="col">@dr.CreatedDate</td>
+                    <td scope="col">@dr.ModifiedDate</td>
+
+                    <td>
+                        <a class="btn btn-outline-success" asp-controller="State" asp-action="StateAddEdit" asp-route-UserID="@dr.StateID">
+                            <i class="bi bi-pen-fill"></i>
+                        </a>
+                    </td>
+                    <td>
+
+                    <td>
+
+
+                        <form method="post" asp-controller="State" asp-action="StateDelete">
+                            <input type="hidden" name="StateID" value=@dr.StateID />
+                            <button type="submit" class="btn btn-outline-danger btn-xs" onclick="return confirm('Sure!! Are you want to delete @dr.StateName')">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
