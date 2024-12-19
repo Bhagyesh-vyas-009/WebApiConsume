@@ -24,32 +24,42 @@
         @* <a class="btn btn-info mb-3" asp-controller="ExportToExcel" asp-action="ExportToExcel" asp-route-table="User"><i class="bi bi-filetype-xlsx"></i>Export</a> *@
     </div>
 
+    <div class="mb-3">
+        <input type="text" class="form-control" id="stateSearch" placeholder="Search State">
+    </div>
+
     <table class="table table-striped">
         <thead>
             <tr>
                 <!-- <th scope="col">UserID</th> -->
                 <th scope="col">State Name</th>
                 <th scope="col">State Code</th>
-                <th scope="col">Country ID</th>
-                <th scope="col">Created Date</th>
-                <th scope="col">Modified Date</th>
+                <th scope="col">City Count</th>
+                 <th scope="col">Country Name</th>
+                @* <th scope="col">Created Date</th>
+                <th scope="col">Modified Date</th> *@
                 <th colspan="2">Actions</th>
 
             </tr>
         </thead>
-        <tbody>
+        <tbody id="stateTable">
             @foreach (var dr in Model)
             {
                 <tr>
                     <!-- <td scope="col">dr.UserID</td> -->
                     <td scope="col">@dr.StateName</td>
                     <td scope="col">@dr.StateCode</td>
-                    <td scope="col">@dr.CountryID</td>
-                    <td scope="col">@dr.CreatedDate</td>
-                    <td scope="col">@dr.ModifiedDate</td>
+                    <td scope="col">
+                        <a class="text-info text-decoration-none fw-bold bg-primary p-1 rounded-3" asp-controller="City" asp-action="CityList" asp-route-filterID="@dr.StateID" >
+                            @dr.CityCount
+                        </a>
 
+                    <td scope="col">@dr.CountryName</td> 
+                    @* <td scope="col">@dr.CreatedDate</td>
+                    <td scope="col">@dr.ModifiedDate</td> *@
+                    </td>
                     <td>
-                        <a class="btn btn-outline-success" asp-controller="State" asp-action="StateAddEdit" asp-route-UserID="@dr.StateID">
+                        <a class="btn btn-outline-success" asp-controller="State" asp-action="StateAddEdit" asp-route-StateID="@dr.StateID">
                             <i class="bi bi-pen-fill"></i>
                         </a>
                     </td>
@@ -71,3 +81,15 @@
     </table>
 </section>
 
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#stateSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#stateTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+    </script>
+}

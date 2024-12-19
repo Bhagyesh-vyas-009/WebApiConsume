@@ -24,42 +24,37 @@
         @* <a class="btn btn-info mb-3" asp-controller="ExportToExcel" asp-action="ExportToExcel" asp-route-table="User"><i class="bi bi-filetype-xlsx"></i>Export</a> *@
     </div>
 
-    <table class="table table-striped">
+    <div class="mb-3">
+        <input type="text" class="form-control" id="citySearch" placeholder="Search City">
+    </div>
+
+    <table class="table table-striped" >
         <thead>
             <tr>
-                <!-- <th scope="col">UserID</th> -->
                 <th scope="col">City Name</th>
                 <th scope="col">City Code</th>
-                <th scope="col">Country ID</th>
-                <th scope="col">State ID</th>
-                <th scope="col">Created Date</th>
-                <th scope="col">Modified Date</th>
+                <th scope="col">State Name</th>
+                 <th scope="col">Country Name</th>
                 <th colspan="2">Actions</th>
 
             </tr>
         </thead>
-        <tbody>
-            @foreach (var dr in Model)
+        <tbody id="cityTable">
+            @foreach (var dr in ViewBag.Data)
             {
                 <tr>
-                    <!-- <td scope="col">dr.UserID</td> -->
                     <td scope="col">@dr.CityName</td>
                     <td scope="col">@dr.CityCode</td>
-                    <td scope="col">@dr.CountryID</td>
-                    <td scope="col">@dr.StateID</td>
-                    <td scope="col">@dr.CreatedDate</td>
-                    <td scope="col">@dr.ModifiedDate</td>
+                    <td scope="col">@dr.StateName</td>
+                     <td scope="col">@dr.CountryName</td>
+
 
                     <td>
-                        <a class="btn btn-outline-success" asp-controller="City" asp-action="CityAddEdit" asp-route-UserID="@dr.CityID">
+                        <a class="btn btn-outline-success" asp-controller="City" asp-action="CityAddEdit" asp-route-CityID="@dr.CityID">
                             <i class="bi bi-pen-fill"></i>
                         </a>
                     </td>
                     <td>
-
-                    <td>
-
-
                         <form method="post" asp-controller="City" asp-action="CityDelete">
                             <input type="hidden" name="CityID" value=@dr.CityID />
                             <button type="submit" class="btn btn-outline-danger btn-xs" onclick="return confirm('Sure!! Are you want to delete @dr.CityName')">
@@ -72,4 +67,19 @@
         </tbody>
     </table>
 </section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#citySearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#cityTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+    </script>
+}
+
+
 

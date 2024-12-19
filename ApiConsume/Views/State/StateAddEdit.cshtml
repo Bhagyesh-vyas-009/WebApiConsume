@@ -1,0 +1,63 @@
+﻿@model StateModel
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@((Model.StateID > 0) ? "Edit" : "Add New") State</h5>
+
+
+        <!-- Multi Columns Form -->
+        <form class="row g-3" asp-controller="State" asp-action="StateSave">
+            @Html.HiddenFor(x => x.StateID)
+            <div class="col-md-6">
+                <label class="form-label" asp-for="StateName">State Name<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" asp-for="StateName" />
+                <span asp-validation-for="StateName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="StateCode" class="form-label">State Code<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" asp-for="StateCode">
+                <span asp-validation-for="StateCode" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="CountryID" class="form-label">Country Name<span class="text-danger">*</span></label>
+                @*  <select class="form-control" asp-for="CountryID" asp-items="@(new SelectList(ViewBag.CountryList, "CountryID", "CountryName"))">
+                <option value="">Select Country</option>
+                </select> *@
+                <select id="CountryID"
+                        name="CountryID"
+                        class="form-control"
+                        asp-for="CountryID">
+                    <option value="">Select Country</option>
+                    @foreach (var country in ViewBag.CountryList)
+                    {
+                        <option value="@country.CountryID">
+                            @country.CountryName
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="CountryID" class="text-danger"></span>
+            </div>
+
+
+            <div class="row">
+
+                @if (Model.StateID == null || Model.StateID == 0)
+                {
+                    <button type="submit" class="btn btn-outline-success mt-3 me-3 col-2">Add State</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-outline-success mt-3 me-3 col-2">Update State</button>
+                }
+                <a asp-action="StateList" asp-controller="State" class="btn btn-outline-warning mt-3 col-2">Back To List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

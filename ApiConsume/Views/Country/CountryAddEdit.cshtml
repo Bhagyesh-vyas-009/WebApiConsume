@@ -1,0 +1,43 @@
+﻿@model CountryModel
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@((Model.CountryID > 0) ? "Edit" : "Add New") Country</h5>
+
+
+        <!-- Multi Columns Form -->
+        <form class="row g-3" asp-controller="Country" asp-action="CountrySave">
+            @Html.HiddenFor(x => x.CountryID)
+            <div class="col-md-6">
+                <label class="form-label" asp-for="CountryName">Country Name<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" asp-for="CountryName" />
+                <span asp-validation-for="CountryName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="CountryCode" class="form-label">Country Code<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" asp-for="CountryCode">
+                <span asp-validation-for="CountryCode" class="text-danger"></span>
+            </div>
+
+
+            <div class="row">
+
+                @if (Model.CountryID == null || Model.CountryID == 0)
+                {
+                    <button type="submit" class="btn btn-outline-success mt-3 me-3 col-2">Add Country</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-outline-success mt-3 me-3 col-2">Update Country</button>
+                }
+                <a asp-action="CountryList" asp-controller="Country" class="btn btn-outline-warning mt-3 col-2">Back To List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

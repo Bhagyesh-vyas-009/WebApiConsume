@@ -1,0 +1,48 @@
+﻿@model ApiConsume.Models.CityModel
+
+<h2>Add/Edit City</h2>
+<form method="post" asp-action="CitySave">
+    <label>Country</label>
+    <select asp-for="CountryID" id="CountryID" asp-items="@(new SelectList(ViewBag.CountryList, "CountryID", "CountryName"))"></select>
+    @* <select id="CountryID"
+            name="CountryID"
+            class="form-control"
+            asp-for="CountryID">
+        <option value="">Select Country</option>
+        @foreach (var country in ViewBag.CountryList)
+        {
+            <option value="@country.CountryID">
+                @country.CountryName
+            </option>
+        }
+    </select> *@
+    <span asp-validation-for="CountryID" class="text-danger"></span>
+
+    <label>State</label>
+    <select class="form-control" asp-for="StateID" id="StateID">
+    </select>
+    <span asp-validation-for="StateID" class="text-danger"></span>
+
+    <label>City Name</label>
+    <input asp-for="CityName" />
+
+    <label>City Code</label>
+    <input asp-for="CityCode" />
+
+    <button type="submit">Save</button>
+</form>
+
+<script>
+    $('#CountryID').change(function () {
+
+        $('#CountryID').change(function () {
+
+            console.log('Hiii');
+            $.post('@Url.Action("GetStatesByCountry")', { CountryID: $(this).val() }, function (data) {
+                $('#StateID').empty().append('<option>Select State</option>');
+                $.each(data, function (i, state) {
+                    $('#StateID').append(`<option value="${state.stateID}">${state.stateName}</option>`);
+                });
+            });
+        });
+</script>

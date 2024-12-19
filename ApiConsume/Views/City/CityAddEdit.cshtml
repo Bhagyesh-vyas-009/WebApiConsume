@@ -1,0 +1,101 @@
+﻿@model ApiConsume.Models.CityModel
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@((Model.CityID > 0) ? "Edit" : "Add New") City</h5>
+
+        @{
+            if (@TempData["Message"] != null)
+            {
+                <p class="col text-success bg-success-subtle p-2 rounded">@TempData["Message"]</p>
+            }
+        }
+
+        <!-- Multi Columns Form -->
+        <form class="row g-3" asp-controller="City" asp-action="CitySave">
+            @Html.HiddenFor(x => x.CityID);
+            <div class="col-md-6">
+                <label class="form-label" asp-for="CityName">City Name<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" asp-for="CityName" />
+                <span asp-validation-for="CityName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="CityCode" class="form-label">City Code<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" asp-for="CityCode">
+                <span asp-validation-for="CityCode" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="CountryID" class="form-label">Country Name<span class="text-danger">*</span></label>
+                <select id="CountryID"
+                        name="CountryID"
+                        class="form-control"
+                        asp-for="CountryID">
+                    <option value="">Select Country</option>
+                    @foreach (var country in ViewBag.CountryList)
+                    {
+                        <option value="@country.CountryID">
+                            @country.CountryName
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="CountryID" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="StateID" class="form-label">State Name<span class="text-danger">*</span></label>
+                <select class="form-control" asp-for="StateID">
+                    <option value="">Select State</option>
+                    @if (ViewBag.StateList != null)
+                    {
+                        foreach (var state in ViewBag.StateList)
+                        {
+                            if (state.StateID == Model.StateID)
+                            {
+                                <option value="@state.StateID">@state.StateName</option>
+                            }
+                            else
+                            {
+                                <option value="@state.StateID">@state.StateName</option>
+                            }
+                        }
+                    }
+                </select>
+                <span asp-validation-for="StateID" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="row">
+
+                @if (Model.CityID == null || Model.CityID == 0)
+                {
+                    <button type="submit" class="btn btn-outline-success mt-3 me-3 col-2">Add City</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-outline-success mt-3 me-3 col-2">Update City</button>
+                }
+                <a asp-action="CityList" asp-controller="City" class="btn btn-outline-warning mt-3 col-2">Back To List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $('#CountryID').change(function () {
+
+            console.log('Hiii');
+            $.post('@Url.Action("GetStatesByCountry")', { CountryID: $(this).val() }, function (data) {
+                $('#StateID').empty().append('<option>Select State</option>');
+                $.each(data, function (i, state) {
+                    $('#StateID').append(`<option value="${state.stateID}">${state.stateName}</option>`);
+                });
+            });
+        });
+    </script>
+}

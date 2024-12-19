@@ -43,11 +43,11 @@
                     <!-- <td scope="col">dr.UserID</td> -->
                     <td scope="col">@dr.CountryName</td>
                     <td scope="col">@dr.CountryCode</td>
-                    <td scope="col">@dr.CreatedDate</td>
-                    <td scope="col">@dr.ModifiedDate</td>
+                    <td scope="col">@dr.CreatedDate.ToShortDateString()</td>
+                    <td scope="col">@dr.ModifiedDate.ToShortDateString()</td>
 
                     <td>
-                        <a class="btn btn-outline-success" asp-controller="Country" asp-action="CountryAddEdit" asp-route-UserID="@dr.CountryID">
+                        <a class="btn btn-outline-success" asp-controller="Country" asp-action="CountryAddEdit" asp-route-CountryID="@dr.CountryID">
                         <i class="bi bi-pen-fill"></i>
                         </a>
                     </td>
